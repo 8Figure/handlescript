@@ -159,7 +159,7 @@ function HandleScriptContent(id) {
 				$.each(templates, function(i, item)
 				{
 					var name = $(item).attr("name");
-					var dizerObj = new HandleScriptObject(
+					var handleObj = new HandleScriptObject(
 					name,
 					$(item).attr("bindingDiv"),
 					$(item).attr("jsonUrl"),
@@ -167,7 +167,7 @@ function HandleScriptContent(id) {
 					$(item).attr("css"),
 					$(item).attr("delayLoad"));
 					
-					_this.add(name, dizerObj);
+					_this.add(name, handleObj);
 				});
 			}
 		}, 
@@ -219,16 +219,4 @@ function HandleScriptContent(id) {
 			}
 		}
 	}
-}
-//DizerTitlebar.mustache
-function DizerTitleBar() {
-	this.inheritFrom = HandleScriptObject;
-	this.inheritFrom();
-
-}
-
-function DizerDashboard() {
-	this.inheritFrom = HandleScriptObject;
-	this.inheritFrom();
-
 }
