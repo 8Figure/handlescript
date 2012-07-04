@@ -1,0 +1,12 @@
+<!--
+	This xml file pairs together template, data, and javascript.  The order of the templates is the order that it will appear on the page.  Assumes the header and footer already exist per page.
+	
+	If you need to add data and not delay load then add it as part of the json url; ie: Foo.php?abc=123
+	Otherwise you can pass it in to the render function that takes the template name
+-->
+<pages>
+<page name="index">
+<Template name="a.handlebars" jsonUrl="" js="a.js" css="" bindingDiv="a" delayLoad="false"/>
+<Template name="b.handlebars" jsonUrl="" js="b.js" css="" bindingDiv="b" delayLoad="false"/>
+</page>
+</pages>
