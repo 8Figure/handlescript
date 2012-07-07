@@ -1,4 +1,4 @@
-function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad)  
+function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad, single)  
 {
 	var _template = null;
 	var _templateName = templateName;
@@ -8,6 +8,30 @@ function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad
 	var _css = css;
 	var _jsFile = jsFile;
 	var _delayLoad = delayLoad;
+	var _single = single;
+	var _loaded = false;
+	
+	this.getIsLoaded = function()
+	{
+		return _loaded;
+	}
+
+	this.setIsLoaded = function()
+	{
+		_loaded = true;	
+	}
+
+	this.getSingle = function()
+	{
+		if(_single != null && _single != "")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	this.getDivIDForBinding = function(shouldGenerate)
 	{
@@ -72,26 +96,34 @@ function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad
 	
 	this.compileTemplate = function(urlParams, callback)
 	{
-		this.getTemplate();
-		var source = Handlebars.compile(_template);
-		
-		if(_dataUrl != null && _dataUrl != "")
-		{
-			//TODO should we do error checking on the urlParams? like validate the question mark, etc
-			$.getJSON(_dataUrl+"?"+urlParams, function(JsonData)
-			{
-				_compiledHtml = source(JsonData);
-				callback();
-			});
+	    if(this.getIsLoaded() == false)
+	    { 
+		    this.getTemplate();
+		    var source = Handlebars.compile(_template);
+    		
+		    if(_dataUrl != null && _dataUrl != "")
+		    {
+			    //TODO should we do error checking on the urlParams? like validate the question mark, etc
+			    $.getJSON(_dataUrl+"?"+urlParams, function(JsonData)
+			    {
+				    _compiledHtml = source(JsonData);
+				    callback();
+			    });
+		    }
+		    else
+		    {
+			    _compiledHtml = source("");
+
+			    if(callback != null)
+			    {
+				    callback();
+			    }
+		    }
 		}
 		else
 		{
-			_compiledHtml = source("");
-
-			if(callback != null)
-			{
-				callback();
-			}
+		    //the data is already loaded, lets call back the function to let them know the data is there already
+		    callback();
 		}
 	}
 	this.getHtml = function()
@@ -170,7 +202,8 @@ function HandleScriptContent(element) {
 					$(item).attr("jsonUrl"),
 					$(item).attr("js"),
 					$(item).attr("css"),
-					$(item).attr("delayLoad"));
+					$(item).attr("delayLoad"),
+					$(item).attr("single"));
 					
 					_this.add(name, handleObj);
 				});
@@ -182,25 +215,51 @@ function HandleScriptContent(element) {
 	this.renderTemplate = function(templateName, jsonUrlParams, callback)
 	{
 		if(_children.hasOwnProperty(templateName))
-		{
-			_children[templateName].compileTemplate(jsonUrlParams, function()
-			{
-				//wait before execution of next call
-				if(_element != null && _element != "")
-				{
-					element.append($('<div/>').attr('id', HandleScriptObject.generateID()).html(_children[templateName].getHtml()));
-					callback();
-				}
-				else
-				{
-					var elementToBind = '#'+_children[templateName].getDivIDForBinding()+'';
-					$(elementToBind).html(_children[templateName].getHtml());
-					if(callback != null)
-					{
-						callback();
-					}
-				}
-			});
+		{		
+            _children[templateName].compileTemplate(jsonUrlParams, function()
+		    {
+		        var addElement = false;
+			    //wait before execution of next call
+			    if(_element != null && _element != "")
+			    {
+				    var elementName = null;
+
+				    if(_children[templateName].getSingle() == true)
+				    {
+				        if(_children[templateName].getIsLoaded() == false)
+				        {
+					        elementName = templateName;
+					        addElement = true;
+					    }
+				    }
+				    else
+				    {
+					    elementName = HandleScriptObject.generateID();
+					    addElement = true;
+				    }
+				    
+				    if(_children[templateName].getIsLoaded() == false)
+                    {
+                        //set this so we do not request the items again if the template is reused
+				        _children[templateName].setIsLoaded();
+				    }
+				    
+				    if(addElement == true)
+				    {
+				        element.append($('<div/>').attr('id', elementName).html(_children[templateName].getHtml()));
+				        callback();
+                    }
+			    }
+			    else
+			    {
+				    var elementToBind = '#'+_children[templateName].getDivIDForBinding()+'';
+				    $(elementToBind).html(_children[templateName].getHtml());
+				    if(callback != null)
+				    {
+					    callback();
+				    }
+			    }
+		    });
 		}
 	}
 	
