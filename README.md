@@ -11,3 +11,4 @@ Supports the following:
 + Dynamically add css to the template
 + Allow the same template to be loaded many times or only a single time
 
+![handlescript architecture](https://github.com/8Figure/handlescript/raw/master/handlescript_diagram.png)
