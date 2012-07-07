@@ -191,7 +191,6 @@ function HandleScriptContent(element) {
 			
 			if(result != null)
 			{
-				//var result = $(data).find( "//page[name='"+ name+"']");
 				var templates = $(result).find("Template");
 				$.each(templates, function(i, item)
 				{
