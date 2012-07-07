@@ -10,7 +10,10 @@
 <script type="text/javascript">
 	var content = new HandleScriptContent($("#main"));
 	content.load();
-	content.render();
+	content.render(function(templateName, dynamicDivID)
+	{
+		alert("loaded template:"+templateName+" as divID: "+dynamicDivID);
+	});
 </script>
 
 

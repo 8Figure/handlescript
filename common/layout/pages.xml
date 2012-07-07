@@ -7,7 +7,7 @@
 <pages>
 <page name="index.html">
 <Template name="a.handlebars" jsonUrl="" js="a.js" css="" bindingDiv="a" delayLoad="false"/>
-<Template name="b.handlebars" jsonUrl="" js="b.js" css="" bindingDiv="b" delayLoad="false"/>
+<Template name="b.handlebars" jsonUrl="/js/JSON/bJSON.js" js="b.js" css="" bindingDiv="b" delayLoad="false"/>
 </page>
 <page name="index2.html">
 <Template name="c.handlebars" jsonUrl="" js="c.js" css="" bindingDiv="" delayLoad="false"/>

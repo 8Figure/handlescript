@@ -1,8 +1,8 @@
 function sayC()
 {
-	content.renderTemplate("b.handlebars", "", function()
+	content.renderTemplate("b.handlebars", "", function(templateName, divID)
 	{
-		alert('loaded');
+		alert("loaded template:"+templateName+" as divID: "+divID);
 	});
 	return false;
 }
