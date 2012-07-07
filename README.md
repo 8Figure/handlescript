@@ -10,3 +10,5 @@ Supports the following:
 + Dynamically bind JSON to the template
 + Dynamically add css to the template
 + Allow the same template to be loaded many times or only a single time
+
+![handlescript architecture](raw/master/handlescript_diagram.png)
