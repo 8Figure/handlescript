@@ -1,7 +1,7 @@
 handlescript
 ============
 
-Web Framework based on javascript, css and handlebars to create reusable controls and templates.
+Client side web Framework based on javascript, css and handlebars to create reusable controls and templates.
 
 Supports the following:
 + Load multiple templates
