@@ -104,7 +104,7 @@ function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad
             if(_dataUrl != null && _dataUrl != "")
             {
                 //TODO should we do error checking on the urlParams? like validate the question mark, etc
-                $.getJSON(_dataUrl+"?"+urlParams, function(JsonData)
+                $.getJSON(urlParams == null ? _dataUrl : _dataUrl+"?"+urlParams, function(JsonData)
                 {
                     _compiledHtml = source(JsonData);
                     callback();
