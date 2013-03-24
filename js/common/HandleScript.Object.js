@@ -20,7 +20,7 @@ function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad
     {
         _loaded = true;
     }
-
+    
     this.getSingle = function()
     {
         if(_single != null && _single != "")
@@ -106,7 +106,10 @@ function HandleScriptObject(templateName, divID, jsonUrl, jsFile, css, delayLoad
                 //TODO should we do error checking on the urlParams? like validate the question mark, etc
                 $.getJSON(urlParams == null ? _dataUrl : _dataUrl+"?"+urlParams, function(JsonData)
                 {
-                    _compiledHtml = source(JsonData);
+                    if($(JsonData).size() > 0)
+                    {
+                        _compiledHtml = source(JsonData);
+                    }
                     callback();
                 });
             }
@@ -155,15 +158,32 @@ HandleScriptObject.generateID = function()
 function HandleScriptContent(element) {
     var _element = element;
     var _children = new Object();
-        
+    var _nonDelayloadTemplateSize = 0;
+    var _templateSize = 0;
     this.add = function(name, item)
     {
         if(! _children.hasOwnProperty(name))
         {
+            _templateSize++;
+            if(item.getDelayLoad() == "false")
+            {
+                _nonDelayloadTemplateSize++;
+            }
             _children[name] = item;
+            
         }
     }
-    
+    this.renderTemplateSize = function(includeDelayLoad)
+    {
+        if(null != includeDelayLoad)
+        {
+            if(includeDelayLoad == false)
+            {
+                return _nonDelayloadTemplateSize;
+            }
+        }
+        return _templateSize;
+    }
     this.load = function()
     {
         var _this = this;
